@@ -17,6 +17,7 @@ import {
   getMenuItems,
   saveMenuItems,
   clearMenu,
+  filterMenuItems,
 } from "../services/database";
 
 const categories = [
@@ -29,6 +30,7 @@ const categories = [
 export default function Home() {
   const [menu, setMenu] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [debouncedSearchText, setDebouncedSearchText] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
@@ -56,9 +58,25 @@ export default function Home() {
         console.log(error);
       }
     };
-
     loadMenu();
   }, []);
+
+useEffect(() => {
+  const filteredMenu = filterMenuItems(
+    debouncedSearchText,
+    selectedCategories
+  );
+
+  setMenu(filteredMenu);
+}, [debouncedSearchText, selectedCategories]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
 
   const toggleCategory = (category) => {
     if (selectedCategories.includes(category)) {
@@ -149,7 +167,7 @@ export default function Home() {
       <FlatList
         data={menu}
         keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={<HeaderComponent />}
+        ListHeaderComponent={HeaderComponent}
         renderItem={({ item }) => (
           <View style={styles.menuItem}>
             <View style={styles.menuText}>
