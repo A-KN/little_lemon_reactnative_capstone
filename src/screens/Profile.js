@@ -152,7 +152,11 @@ export default function Profile() {
 
   return (
     <ScrollView style={styles.container}>
-      <ProfileHeader />
+      <ProfileHeader
+        firstName={firstName}
+        lastName={lastName}
+        avatar={avatar} 
+        />
 
       <Text style={styles.sectionTitle}>
         Personal Information
@@ -163,14 +167,18 @@ export default function Profile() {
       </Text>
 
       <View style={styles.avatarSection}>
-        <Image
-          source={
-            avatar
-              ? { uri: avatar }
-              : require("../../assets/images/Profile.png")
-          }
-          style={styles.largeAvatar}
-        />
+        {avatar ? (
+          <Image
+            source={{ uri: avatar }}
+            style={styles.largeAvatar}
+          />
+        ) : (
+          <View style={styles.initialsAvatar}>
+            <Text style={styles.initialsText}>
+              {`${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}`.toUpperCase()}
+            </Text>
+          </View>
+        )}
 
         <Pressable 
         style={styles.changeButton}
@@ -462,6 +470,21 @@ saveButton: {
 saveText: {
   color: "#FFFFFF",
   fontWeight: "600",
+},
+
+initialsAvatar: {
+  width: 72,
+  height: 72,
+  borderRadius: 36,
+  backgroundColor: "#495E57",
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+initialsText: {
+  color: "#FFFFFF",
+  fontSize: 26,
+  fontWeight: "700",
 },
 
 });

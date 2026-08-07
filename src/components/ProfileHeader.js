@@ -1,12 +1,26 @@
 import React from "react";
-import { View, Image, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function ProfileHeader() {
+export default function ProfileHeader({
+  firstName,
+  lastName,
+  avatar,
+}) {
   return (
     <View style={styles.container}>
       <Pressable style={styles.iconButton}>
-        <Ionicons name="arrow-back" size={22} color="#495E57" />
+        <Ionicons
+          name="chevron-back"
+          size={24}
+          color="#333333"
+        />
       </Pressable>
 
       <Image
@@ -15,10 +29,18 @@ export default function ProfileHeader() {
         resizeMode="contain"
       />
 
-      <Image
-        source={require("../../assets/images/Profile.png")}
-        style={styles.avatar}
-      />
+      {avatar ? (
+        <Image
+          source={{ uri: avatar }}
+          style={styles.avatar}
+        />
+      ) : (
+        <View style={styles.initialsAvatar}>
+          <Text style={styles.initialsText}>
+            {`${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}`.toUpperCase()}
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -51,5 +73,20 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+  },
+
+  initialsAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "#495E57",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  initialsText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    fontWeight: "700",
   },
 });
