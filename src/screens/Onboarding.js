@@ -28,7 +28,12 @@ export default function Onboarding() {
   const navigation = useNavigation();
   const completeOnboarding = async () => {
   try {
-    await AsyncStorage.setItem("onboardingCompleted", "true");
+    await AsyncStorage.multiSet([
+      ["onboardingCompleted", "true"],
+      ["firstName", firstName],
+      ["email", email],
+    ]);
+
     navigation.replace("Profile");
   } catch (error) {
     console.log(error);
