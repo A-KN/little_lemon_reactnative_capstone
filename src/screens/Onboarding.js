@@ -34,7 +34,7 @@ export default function Onboarding() {
       ["email", email],
     ]);
 
-    navigation.replace("Profile");
+    navigation.replace("Home");
   } catch (error) {
     console.log(error);
   }
