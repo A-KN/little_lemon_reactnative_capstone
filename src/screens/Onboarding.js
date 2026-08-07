@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import {
   View,
@@ -23,6 +25,15 @@ export default function Onboarding() {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const isFormValid = isNameValid && isEmailValid;
+  const navigation = useNavigation();
+  const completeOnboarding = async () => {
+  try {
+    await AsyncStorage.setItem("onboardingCompleted", "true");
+    navigation.replace("Profile");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <KeyboardAvoidingView
@@ -90,6 +101,7 @@ export default function Onboarding() {
 
         <Pressable
           disabled={!isFormValid}
+          onPress={completeOnboarding}
           style={[
             styles.button,
             {
