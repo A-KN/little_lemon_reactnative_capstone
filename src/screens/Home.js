@@ -27,6 +27,90 @@ const categories = [
   "Drinks",
 ];
 
+function HeaderComponent({
+  searchText,
+  setSearchText,
+  selectedCategories,
+  toggleCategory,
+}) {
+  return (
+    <>
+      {/* Header */}
+      
+      <HomeHeader />
+
+      {/* Hero */}
+      <View style={styles.hero}>
+        <View style={styles.heroTop}>
+          <View style={styles.heroText}>
+            <Text style={styles.restaurantName}>
+              Little Lemon
+            </Text>
+
+            <Text style={styles.city}>
+              Chicago
+            </Text>
+
+            <Text style={styles.description}>
+              We are a family owned Mediterranean restaurant,
+              focused on traditional recipes served with a
+              modern twist.
+            </Text>
+          </View>
+
+          <Image
+            source={require("../../assets/images/Hero image.png")}
+            style={styles.heroImage}
+          />
+        </View>
+
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+      </View>
+
+      {/* Categories */}
+      <Text style={styles.deliveryTitle}>
+        ORDER FOR DELIVERY!
+      </Text>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryContainer}
+      >
+        {categories.map((category) => (
+          <Pressable
+            key={category}
+            onPress={() => toggleCategory(category)}
+            style={[
+              styles.categoryButton,
+              selectedCategories.includes(category)
+                ? styles.categoryButtonSelected
+                : null,
+            ]}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                selectedCategories.includes(category)
+                  ? styles.categoryTextSelected
+                  : null,
+              ]}
+            >
+              {category}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+    </>
+  );
+}
+
+
 export default function Home() {
   const [menu, setMenu] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -91,83 +175,20 @@ useEffect(() => {
     }
   };
 
-  const HeaderComponent = () => (
-    <>
-      <HomeHeader />
 
-      <View style={styles.hero}>
-        <View style={styles.heroTop}>
-          <View style={styles.heroText}>
-            <Text style={styles.restaurantName}>
-              Little Lemon
-            </Text>
-
-            <Text style={styles.city}>
-              Chicago
-            </Text>
-
-            <Text style={styles.description}>
-              We are a family owned Mediterranean restaurant,
-              focused on traditional recipes served with a
-              modern twist.
-            </Text>
-          </View>
-
-          <Image
-            source={require("../../assets/images/Hero image.png")}
-            style={styles.heroImage}
-          />
-        </View>
-
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          value={searchText}
-          onChangeText={setSearchText}
-        />
-      </View>
-
-      <Text style={styles.deliveryTitle}>
-        ORDER FOR DELIVERY!
-      </Text>
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryContainer}
-      >
-        {categories.map((category) => (
-          <Pressable
-            key={category}
-            onPress={() => toggleCategory(category)}
-            style={[
-              styles.categoryButton,
-              selectedCategories.includes(category)
-                ? styles.categoryButtonSelected
-                : null,
-            ]}
-          >
-            <Text
-              style={[
-                styles.categoryText,
-                selectedCategories.includes(category)
-                  ? styles.categoryTextSelected
-                  : null,
-              ]}
-            >
-              {category}
-            </Text>
-          </Pressable>
-        ))}
-      </ScrollView>
-    </>
-  );
   return (
     <View style={styles.container}>
       <FlatList
         data={menu}
         keyExtractor={(item) => item.id.toString()}
-        ListHeaderComponent={HeaderComponent}
+        ListHeaderComponent={
+          <HeaderComponent
+            searchText={searchText}
+            setSearchText={setSearchText}
+            selectedCategories={selectedCategories}
+            toggleCategory={toggleCategory}
+          />
+        }
         renderItem={({ item }) => (
           <View style={styles.menuItem}>
             <View style={styles.menuText}>
